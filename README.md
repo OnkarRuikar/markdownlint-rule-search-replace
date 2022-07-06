@@ -57,14 +57,15 @@ For example,
 }
 ```
 Here,
-- `search-replace`: An array of search-replace definitions.
+- `search-replace`: The rule configuration object.
+- `rules`: An array of search-replace definitions.
 - search-replace definition: defines search term/pattern and replacement.
   - `name`: name of the definition
   - `message`: corresponding message
   - `search`: text to search
   - `search_pattern`: regex pattern to search. Include flags as well, as if you are defining a regex literal in JavaScript, e.g. `/http/g`.
   - `replace`: The replacement string, e.g. `https`. Regex properties like `$1` can be used if `search_pattern` is being used.
-  - `skip_code`: Optional. All code(inline and block), which is inside backticks, will be skipped. 
+  - `skip_code`: Optional. All code(inline and block), which is inside backticks, will be skipped.
 
 Note, `search` and `search_pattern` are interchangeable. The property `search` is used if both are supplied.
 
