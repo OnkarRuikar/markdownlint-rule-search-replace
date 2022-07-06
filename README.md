@@ -29,35 +29,42 @@ npm install markdownlint-rule-search-replace --save-dev
 
 There are various ways markdownlint can be configured using objects, config files etc. For more information on markdownlint configuration refer [options.config](https://github.com/DavidAnson/markdownlint#optionsconfig).
 
-
 ### Using .markdownlint.json config file
 
 You'll have to add a configuration entry in the .markdownlint.json file. 
 For example,
 ```json
-"search-replace": [
-  {
-    "name": "ellipsis",
-    "message": "Do not use three dots '...' for ellipsis.",
-    "search": "...",
-    "replace": "…"
-  },
-  {
-    "name": "curly-double-quotes",
-    "message": "Do not use curly double quotes.",
-    "search_pattern": "/“|”/g",
-    "replace": "\""
+{
+  "default": true,
+  "MD001": false,
+  "search-replace": {
+    "rules": [
+      {
+        "name": "ellipsis",
+        "message": "Do not use three dots '...' for ellipsis.",
+        "search": "...",
+        "replace": "…",
+        "skip_code": true
+      },
+      {
+         "name": "curly-double-quotes",
+         "message": "Do not use curly double quotes.",
+         "search_pattern": "/“|”/g",
+         "replace": "\""
+      }
+   ]
   }
-]
+}
 ```
 Here,
 - `search-replace`: An array of search-replace definitions.
 - search-replace definition: defines search term/pattern and replacement.
   - `name`: name of the definition
   - `message`: corresponding message
-  - `search`: plain text to search
+  - `search`: text to search
   - `search_pattern`: regex pattern to search. Include flags as well, as if you are defining a regex literal in JavaScript, e.g. `/http/g`.
-  - `replace`: The replacement text, e.g. `https`. Regex properties like `$1` can be used if `search_pattern` is being used.
+  - `replace`: The replacement string, e.g. `https`. Regex properties like `$1` can be used if `search_pattern` is being used.
+  - `skip_code`: Optional. All code(inline and block), which is inside backticks, will be skipped. 
 
 Note, `search` and `search_pattern` are interchangeable. The property `search` is used if both are supplied.
 
