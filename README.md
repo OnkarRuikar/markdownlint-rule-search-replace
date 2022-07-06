@@ -13,6 +13,7 @@ For example,
 - three dots `...` to ellipsis `…`
 
 Or specific cases like replace three backticks with one. [[ref](https://github.com/DavidAnson/markdownlint/issues/411)]
+
 Or ban certain words.
 
 In such scenarios the `markdownlint-rule-search-replace` rule can be used to flag or fix such occurrences.
@@ -89,14 +90,14 @@ Use following command for [markdownlint-cli](https://github.com/igorshubovych/ma
 ```shell
 markdownlint test.md -r markdownlint-rule-search-replace
 # or
-markdonwlint test.md -r markdownlint-rule-search-replace --fix
+markdownlint test.md -r markdownlint-rule-search-replace --fix
 ```
 
 ### With markdownlint api
 
 Add the rule object to the `customRules` array:
 
-```
+```js
 const searchReplace = require("markdownlint-rule-search-replace");
 
 const options = {
