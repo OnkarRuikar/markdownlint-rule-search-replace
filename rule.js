@@ -2,37 +2,41 @@
 
 "use strict";
 
+const helpers = require("markdownlint-rule-helpers");
 
 module.exports = {
   names: ["search-replace"],
   description: "Custom rule",
-  information: new URL("https://github.com/OnkarRuikar/markdownlint-rule-search-replace"),
+  information: new URL(
+    "https://github.com/OnkarRuikar/markdownlint-rule-search-replace"
+  ),
   tags: ["replace"],
 
   function: (params, onError) => {
-    if(!params.config.rules) {
+    if (!params.config.rules) {
       return;
     }
 
     const content = params.lines.join("\n");
-    const [backticksData, htmlCommentData] = gatherInfo(content);
+    const lineMetadata = helpers.getLineMetadata(params);
+    const codeRanges = helpers.codeBlockAndSpanRanges(params, lineMetadata);
+    const htmlCommentRanges = gatHtmlCommentRanges(content, params.lines);
 
     params.config.rules.forEach((rule) => {
       const regex = stringToRegex(rule.search || rule.search_pattern);
 
       let result;
       while ((result = regex.exec(content)) !== null) {
-        const match = result[0];
-
-        if(rule.skip_code && isCode(result.index, backticksData)) {
-           continue;
-        }
-
-        if(isHTMLComment(result.index, htmlCommentData)) {
+        if (rule.skip_code && isCode(result.index, codeRanges, params.lines)) {
           continue;
         }
 
-        const [lineNo, columnNo] = getLocation(params.lines, result.index);
+        if (isHTMLComment(result.index, htmlCommentRanges, params.lines)) {
+          continue;
+        }
+
+        const match = result[0];
+        const [lineNo, columnNo] = getLocation(result.index, params.lines);
 
         let replacement = "";
         if (rule.search) {
@@ -42,12 +46,12 @@ module.exports = {
         }
 
         onError({
-          lineNumber: lineNo,
+          lineNumber: lineNo + 1,
           detail: rule.name + ": " + rule.message,
           context: match,
           range: [columnNo + 1, match.length],
           fixInfo: {
-            lineNumber: lineNo,
+            lineNumber: lineNo + 1,
             editColumn: columnNo + 1,
             deleteCount: match.length,
             insertText: replacement,
@@ -58,11 +62,9 @@ module.exports = {
   },
 };
 
-
 const escapeForRegExp = (str) => {
   return str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
-
 
 /**
  * Converts string "/abc/ig" to new RegEx("abc", "ig").
@@ -80,13 +82,11 @@ const stringToRegex = (str) => {
   return new RegExp(pattern, flags);
 };
 
-
 /**
  * Given position in the document returns line and column number.
  */
-const getLocation = (lines, pos) => {
-  let lineNo = 1;
-
+const getLocation = (pos, lines) => {
+  let lineNo = 0;
   for (const line of lines) {
     pos -= line.length + 1;
     if (pos < 0) {
@@ -97,65 +97,43 @@ const getLocation = (lines, pos) => {
   return [lines.length, 0];
 };
 
-
 /**
  * Collect start and end position data of all code fences and html comments.
  */
-const gatherInfo = (content) => {
-  const backtickRgx = /`+/g;
-  const backticksData = [];
+const gatHtmlCommentRanges = (content, lines) => {
+  const regex = /<!--\.*-->/gm;
+  const ranges = [];
   let match = null;
-  let lastLength = null;
-  while ((match = backtickRgx.exec(content)) !== null) {
-    const length = match[0].length;
-    const pos = match.index;
-
-    if(!lastLength) {
-      backticksData.push([length, pos]);
-      lastLength = length;
-    } else if(lastLength === length) {
-      backticksData.push([length, pos]);
-      lastLength = null;
-    }
+  while ((match = regex.exec(content)) !== null) {
+    const pos = getLocation(match.index, lines);
+    ranges.push([...pos, match[0].length]);
   }
-
-  const htmlCommentRgx = /<!--|-->/g;
-  const htmlCommentData = [];
-  while ((match = htmlCommentRgx.exec(content)) !== null) {
-    htmlCommentData.push([match[0].length, match.index]);
-  }
-
-  return [backticksData, htmlCommentData];
+  return ranges;
 };
-
 
 /**
  * Tells if the position lies inside a code block.
  */
-const isCode = (pos, data) => {
-  return isPartOf(pos, data);
+const isCode = (pos, ranges, lines) => {
+  return isPartOf(pos, ranges, lines);
 };
-
 
 /**
  * Tells if the position lies inside an HTML comment.
  */
-const isHTMLComment = (pos, data) => {
-  return isPartOf(pos, data);
+const isHTMLComment = (pos, ranges, lines) => {
+  return isPartOf(pos, ranges, lines);
 };
 
-
 /**
- * Tells if the position lies inside any block in the 'data' array.
+ * Tells if the position lies inside any range
  */
-const isPartOf = (pos, data) => {
-  for(let i = 0; i < data.length; i+=2 ) {
-    const start = data[i][1];
-    const end = data[i+1][0] + data[i+1][1];
-    if(start <= pos && pos <= end ) {
+const isPartOf = (pos, ranges, lines) => {
+  for (const [rLine, rColumn, rLength] of ranges) {
+    const [line, column] = getLocation(pos, lines);
+    if (rLine === line && rColumn <= column && column <= rColumn + rLength) {
       return true;
     }
   }
-
   return false;
 };

@@ -1,6 +1,6 @@
 {
   "name": "markdownlint-rule-search-replace",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A custom markdownlint rule for search and replaces",
   "main": "rule.js",
   "author": "Onkar Ruikar",
@@ -20,5 +20,8 @@
   "private": false,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "markdownlint-rule-helpers": "^0.16.0"
   }
 }
