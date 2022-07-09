@@ -3,7 +3,7 @@
 A custom [markdownlint](https://github.com/DavidAnson/markdownlint) rule to search and replace patterns.
 
 ![npm](https://img.shields.io/npm/v/markdownlint-rule-search-replace)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)A
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 ## Overview
 
@@ -48,12 +48,12 @@ For example,
         "message": "Do not use three dots '...' for ellipsis.",
         "search": "...",
         "replace": "…",
-        "skip_code": true
+        "skipCode": true
       },
       {
         "name": "curly-double-quotes",
         "message": "Do not use curly double quotes.",
-        "search_pattern": "/“|”/g",
+        "searchPattern": "/“|”/g",
         "replace": "\""
       }
     ]
@@ -69,11 +69,11 @@ Here,
   - `name`: name of the definition
   - `message`: corresponding message
   - `search`: text to search
-  - `search_pattern`: regex pattern to search. Include flags as well, as if you are defining a regex literal in JavaScript, e.g. `/http/g`.
-  - `replace`: The replacement string, e.g. `https`. Regex properties like `$1` can be used if `search_pattern` is being used.
-  - `skip_code`: Optional. All code(inline and block), which is inside backticks, will be skipped.
+  - `searchPattern`: regex pattern to search. Include flags as well, as if you are defining a regex literal in JavaScript, e.g. `/http/g`.
+  - `replace`: The replacement string, e.g. `https`. Regex properties like `$1` can be used if `searchPattern` is being used.
+  - `skipCode`: Optional. All code(inline and block), which is inside backticks, will be skipped.
 
-Note, `search` and `search_pattern` are interchangeable. The property `search` is used if both are supplied.
+Note, `search` and `searchPattern` are interchangeable. The property `search` is used if both are supplied.
 
 ### Disable rule options
 

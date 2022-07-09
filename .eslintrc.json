@@ -3,9 +3,26 @@
     "node": true,
     "es6": true
   },
-  "extends": ["eslint:all", "plugin:jsdoc/recommended", "plugin:unicorn/all"],
+  "extends": [
+    "eslint:all",
+    "plugin:jsdoc/recommended",
+    "plugin:unicorn/all",
+    "prettier"
+  ],
   "ignorePatterns": [],
-  "overrides": [],
+  "overrides": [
+    {
+      "files": ["tests/*.js"],
+      "rules": {
+        "jsdoc/require-jsdoc": "off",
+        "jsdoc/require-description": "off",
+        "jsdoc/require-returns": "off",
+        "jsdoc/require-param-type": "off",
+        "jsdoc/require-param-description": "off",
+        "max-len": "off"
+      }
+    }
+  ],
   "parserOptions": {
     "ecmaVersion": 2020,
     "sourceType": "script"
@@ -13,17 +30,17 @@
   "plugins": ["es", "jsdoc", "node", "unicorn"],
   "reportUnusedDisableDirectives": true,
   "rules": {
-    "array-bracket-spacing": ["error", "always"],
+    "array-bracket-spacing": "off",
     "array-element-newline": "off",
     "capitalized-comments": "off",
     "complexity": "off",
-    "dot-location": ["error", "property"],
+    "dot-location": "off",
     "func-style": "off",
     "function-call-argument-newline": "off",
     "function-paren-newline": "off",
     "global-require": "off",
     "id-length": "off",
-    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "indent": "off",
     "linebreak-style": "off",
     "max-depth": "off",
     "max-lines": "off",
@@ -44,10 +61,10 @@
     "no-sync": "off",
     "no-ternary": "off",
     "no-undefined": "off",
-    "object-curly-spacing": ["error", "always"],
+    "object-curly-spacing": "off",
     "object-shorthand": "off",
     "one-var": "off",
-    "operator-linebreak": ["error", "after"],
+    "operator-linebreak": "off",
     "padded-blocks": "off",
     "prefer-arrow-callback": "off",
     "prefer-destructuring": "off",
@@ -55,7 +72,7 @@
     "prefer-template": "off",
     "require-unicode-regexp": "off",
     "sort-keys": "off",
-    "space-before-function-paren": ["error", "never"],
+    "space-before-function-paren": "off",
     "vars-on-top": "off",
     "wrap-regex": "off",
 

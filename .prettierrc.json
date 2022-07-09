@@ -1,1 +1,8 @@
-{}
+{
+  "overrides": [
+    {
+      "files": "/tests/*-test.js",
+      "options": {}
+    }
+  ]
+}

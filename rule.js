@@ -52,12 +52,24 @@ const getLocation = (pos, lines) => {
  * @returns {number[][]} An array of tuple [lineNo, column, length].
  */
 const gatHtmlCommentRanges = (content, lines) => {
-  const regex = /<!--[\s\S]*-->/gm;
+  const regex = /<!--[.\n]*-->/gm;
   const ranges = [];
   let match = null;
   while ((match = regex.exec(content)) !== null) {
     const pos = getLocation(match.index, lines);
-    ranges.push([...pos, match[0].length]);
+
+    if (match[0].includes("\n")) {
+      const parts = match[0].split("\n");
+      for (const [i, p] of parts.entries()) {
+        if (i === 0) {
+          ranges.push([...pos, p.length]);
+        } else {
+          ranges.push([pos[0] + i, 0, p.length]);
+        }
+      }
+    } else {
+      ranges.push([...pos, match[0].length]);
+    }
   }
   return ranges;
 };
@@ -119,11 +131,11 @@ module.exports = {
     const htmlCommentRanges = gatHtmlCommentRanges(content, params.lines);
 
     for (const rule of params.config.rules) {
-      const regex = stringToRegex(rule.search || rule.search_pattern);
+      const regex = stringToRegex(rule.search || rule.searchPattern);
 
       let result = null;
       while ((result = regex.exec(content)) !== null) {
-        if (rule.skip_code && isCode(result.index, codeRanges, params.lines)) {
+        if (rule.skipCode && isCode(result.index, codeRanges, params.lines)) {
           continue;
         }
 
@@ -142,7 +154,7 @@ module.exports = {
         onError({
           lineNumber: lineNo + 1,
           detail: rule.name + ": " + rule.message,
-          context: match,
+          context: `column: ${columnNo + 1} text:'${match}'`,
           range: [columnNo + 1, match.length],
           fixInfo: {
             lineNumber: lineNo + 1,
