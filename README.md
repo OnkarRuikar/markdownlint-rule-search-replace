@@ -3,11 +3,13 @@
 A custom [markdownlint](https://github.com/DavidAnson/markdownlint) rule to search and replace patterns.
 
 ![npm](https://img.shields.io/npm/v/markdownlint-rule-search-replace)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)A
 
 ## Overview
 
-In markdown files, sometimes we want to replace certain characters or patterns. 
+In markdown files, sometimes we want to replace certain characters or patterns.
 For example,
+
 - curly quotes `“` to straight quotes `"`
 - double hyphens `--` to m-dash `—`
 - three dots `...` to ellipsis `…`
@@ -20,7 +22,8 @@ In such scenarios the `markdownlint-rule-search-replace` rule can be used to fla
 
 ## Installation
 
-Use following command to install 
+Use following command to install
+
 ```shell
 npm install markdownlint-rule-search-replace --save-dev
 ```
@@ -31,8 +34,9 @@ There are various ways markdownlint can be configured using objects, config file
 
 ### Using .markdownlint.json config file
 
-You'll have to add a configuration entry in the .markdownlint.json file. 
+You'll have to add a configuration entry in the .markdownlint.json file.
 For example,
+
 ```json
 {
   "default": true,
@@ -47,16 +51,18 @@ For example,
         "skip_code": true
       },
       {
-         "name": "curly-double-quotes",
-         "message": "Do not use curly double quotes.",
-         "search_pattern": "/“|”/g",
-         "replace": "\""
+        "name": "curly-double-quotes",
+        "message": "Do not use curly double quotes.",
+        "search_pattern": "/“|”/g",
+        "replace": "\""
       }
-   ]
+    ]
   }
 }
 ```
+
 Here,
+
 - `search-replace`: The rule configuration object.
 - `rules`: An array of search-replace definitions.
 - search-replace definition: defines search term/pattern and replacement.
@@ -72,12 +78,16 @@ Note, `search` and `search_pattern` are interchangeable. The property `search` i
 ### Disable rule options
 
 The rule can be disabled for specific section or file. For example, if you want to disable the rule for a particular section:
+
 ```md
 ...
+
 ### Markdown rules to follow
 
 The rules are:
+
 <!-- markdownlint-disable search-replace -->
+
 - Do not use three dots '...' for ellipsis. Use '…' instead.
 - Do not use two hyphens '--' use m-dash '—'.
 <!-- markdownlint-enable search-replace -->
@@ -95,6 +105,7 @@ There are various ways to run markdownlint.
 ### With markdownlint-cli
 
 Use following command for [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli):
+
 ```shell
 markdownlint test.md -r markdownlint-rule-search-replace
 # or

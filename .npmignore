@@ -1,0 +1,12 @@
+.eslintignore
+.eslintrc.json
+.github
+.idea
+.markdownlint.json
+.npmrc
+.prettierignore
+.vscode
+npm-debug.log
+package-lock.json
+tests
+test.md

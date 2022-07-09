@@ -19,9 +19,24 @@
   ],
   "private": false,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint --max-warnings 0 --fix .",
+    "prettier-check": "prettier --check .",
+    "prettier-fix": "prettier --write ."
+  },
+  "engines": {
+    "node": ">=14"
   },
   "dependencies": {
     "markdownlint-rule-helpers": "^0.16.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.19.0",
+    "eslint-plugin-es": "^4.1.0",
+    "eslint-plugin-jsdoc": "^39.3.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-unicorn": "^43.0.1",
+    "markdownlint": "^0.26.0",
+    "prettier": "^2.7.1"
   }
 }
