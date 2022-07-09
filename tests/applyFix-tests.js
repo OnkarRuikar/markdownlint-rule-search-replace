@@ -3,7 +3,7 @@
 const test = require("ava").default;
 const markdownlint = require("markdownlint");
 const searchReplace = require("../rule");
-const testFixes = require("./utils").testFixes;
+const applyFixes = require("./utils").applyFixes;
 
 const inputFile = "./tests/data/options-tests.md";
 
@@ -27,7 +27,7 @@ test("applyFixDefault", (t) => {
     files: [inputFile],
   };
   t.is(
-    ...testFixes(
+    ...applyFixes(
       inputFile,
       markdownlint.sync(options),
       "applyFixDefault.out.md"
@@ -56,7 +56,7 @@ test("applyFixRegex", (t) => {
     files: [inputFile],
   };
   t.is(
-    ...testFixes(inputFile, markdownlint.sync(options), "applyFixRegex.out.md"),
+    ...applyFixes(inputFile, markdownlint.sync(options), "applyFixRegex.out.md"),
     "Output doesn't match."
   );
 });
@@ -82,7 +82,7 @@ test("applyFixSkipCode", (t) => {
     files: [inputFile],
   };
   t.is(
-    ...testFixes(
+    ...applyFixes(
       inputFile,
       markdownlint.sync(options),
       "applyFixSkipCode.out.md"

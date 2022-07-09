@@ -6,7 +6,7 @@ const helper = require("markdownlint-rule-helpers");
 const fsOptions = { encoding: "utf8" };
 const dataPath = "./tests/data/";
 
-function testFixes(file, result, expected) {
+function applyFixes(file, result, expected) {
   const originalText = fs.readFileSync(file, fsOptions);
   const fixes = result[file].filter((error) => error.fixInfo);
   result = helper.applyFixes(originalText, fixes);
@@ -14,4 +14,4 @@ function testFixes(file, result, expected) {
   return [result, expected];
 }
 
-module.exports.testFixes = testFixes;
+module.exports.applyFixes = applyFixes;
