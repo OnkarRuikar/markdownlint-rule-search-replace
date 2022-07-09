@@ -1,6 +1,6 @@
 {
   "name": "markdownlint-rule-search-replace",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A custom markdownlint rule for search and replaces",
   "main": "rule.js",
   "author": "Onkar Ruikar",
@@ -19,10 +19,10 @@
   ],
   "private": false,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "eslint": "eslint --max-warnings 0 --fix .",
-    "prettier-check": "prettier --check .",
-    "prettier-fix": "prettier --write ."
+    "test": "ava tests/*-tests.js",
+    "lint": "eslint --max-warnings 0 --fix .",
+    "pretty-check": "prettier --check .",
+    "pretty": "prettier --write ."
   },
   "engines": {
     "node": ">=14"
@@ -31,7 +31,9 @@
     "markdownlint-rule-helpers": "^0.16.0"
   },
   "devDependencies": {
+    "ava": "^4.3.0",
     "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-es": "^4.1.0",
     "eslint-plugin-jsdoc": "^39.3.3",
     "eslint-plugin-node": "^11.1.0",
