@@ -2,7 +2,7 @@
 
 A custom [markdownlint](https://github.com/DavidAnson/markdownlint) rule to search and replace patterns.
 
-![npm](https://img.shields.io/npm/v/markdownlint-rule-search-replace)
+[![npm](https://img.shields.io/npm/v/markdownlint-rule-search-replace)](https://www.npmjs.com/package/markdownlint-rule-search-replace)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 ## Overview
@@ -132,7 +132,7 @@ markdownlint test.md -r markdownlint-rule-search-replace
 markdownlint test.md -r markdownlint-rule-search-replace --fix
 ```
 
-### With markdownlint api
+### With markdownlint API
 
 Add the rule object to the `customRules` array:
 
