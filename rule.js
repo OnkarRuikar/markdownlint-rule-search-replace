@@ -15,13 +15,8 @@ const escapeForRegExp = (str) => str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
  * @returns {RegExp} A RegExp object.
  */
 const stringToRegex = (str) => {
-  let pattern = (str.match(/\/(.+)\/.*/) || [])[1];
-  if (!pattern) {
-    pattern = escapeForRegExp(str);
-  }
-
+  const pattern = (str.match(/\/(.+)\/.*/) || ["", "a^"])[1];
   const flags = (str.match(/\/.+\/(.*)/) || ["", "g"])[1];
-
   return new RegExp(pattern, flags);
 };
 
@@ -121,6 +116,25 @@ module.exports = {
   tags: ["replace"],
 
   function: (params, onError) => {
+    const report = (rule, match, lineNo, columnNo, replacement) => {
+      const options = {
+        lineNumber: lineNo + 1,
+        detail: rule.name + ": " + rule.message,
+        context: `column: ${columnNo + 1} text:'${match}'`,
+        range: [columnNo + 1, match.length],
+      };
+
+      if (typeof replacement !== "undefined") {
+        options.fixInfo = {
+          lineNumber: lineNo + 1,
+          editColumn: columnNo + 1,
+          deleteCount: match.length,
+          insertText: replacement,
+        };
+      }
+      onError(options);
+    };
+
     if (!params.config.rules) {
       return;
     }
@@ -131,8 +145,9 @@ module.exports = {
     const htmlCommentRanges = gatHtmlCommentRanges(content, params.lines);
 
     for (const rule of params.config.rules) {
-      const regex = stringToRegex(rule.search || rule.searchPattern);
-
+      const regex = rule.search
+        ? new RegExp(escapeForRegExp(rule.search), "g")
+        : stringToRegex(rule.searchPattern);
       let result = null;
       while ((result = regex.exec(content)) !== null) {
         if (rule.skipCode && isCode(result.index, codeRanges, params.lines)) {
@@ -151,18 +166,7 @@ module.exports = {
           ? rule.replace
           : match.replace(new RegExp(regex), rule.replace);
 
-        onError({
-          lineNumber: lineNo + 1,
-          detail: rule.name + ": " + rule.message,
-          context: `column: ${columnNo + 1} text:'${match}'`,
-          range: [columnNo + 1, match.length],
-          fixInfo: {
-            lineNumber: lineNo + 1,
-            editColumn: columnNo + 1,
-            deleteCount: match.length,
-            insertText: replacement,
-          },
-        });
+        report(rule, match, lineNo, columnNo, replacement);
       }
     }
   },

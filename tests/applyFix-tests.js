@@ -56,7 +56,11 @@ test("applyFixRegex", (t) => {
     files: [inputFile],
   };
   t.is(
-    ...applyFixes(inputFile, markdownlint.sync(options), "applyFixRegex.out.md"),
+    ...applyFixes(
+      inputFile,
+      markdownlint.sync(options),
+      "applyFixRegex.out.md"
+    ),
     "Output doesn't match."
   );
 });

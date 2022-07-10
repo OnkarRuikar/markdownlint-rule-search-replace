@@ -75,6 +75,26 @@ Here,
 
 Note, `search` and `searchPattern` are interchangeable. The property `search` is used if both are supplied.
 
+In patterns, to escape characters use `\\`. For example,
+
+```json
+{
+  "default": true,
+  "search-replace": {
+    "rules": [
+      {
+        "name": "test",
+        "message": "bla bla bla",
+        "searchPattern": "^/\\.\\.\\.(.*)\\.\\.\\.$/mg",
+        "replace": "-- $1 --"
+      }
+    ]
+  }
+}
+```
+
+This will replace line `...abcd...` with `-- abcd --`.
+
 ### Disable rule options
 
 The rule can be disabled for specific section or file. For example, if you want to disable the rule for a particular section:
@@ -117,11 +137,25 @@ markdownlint test.md -r markdownlint-rule-search-replace --fix
 Add the rule object to the `customRules` array:
 
 ```js
+const markdownlint = require("markdownlint");
 const searchReplace = require("markdownlint-rule-search-replace");
 
 const options = {
-  ...
-  "customRules": [searchReplace]
+  files: ["myMarkdown.md"],
+  config: {
+    default: true,
+    "search-replace": {
+      rules: [
+        {
+          name: "m-dash",
+          message: "Don't use '--'.",
+          search: "--",
+          replace: "—",
+        },
+      ],
+    },
+  },
+  customRules: [searchReplace],
 };
 
 markdownlint(options, function callback(err, result) {

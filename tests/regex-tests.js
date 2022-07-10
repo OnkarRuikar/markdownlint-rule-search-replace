@@ -34,3 +34,63 @@ test("htmlCommentFix", (t) => {
     "Output doesn't match."
   );
 });
+
+test("searchRegexFix", (t) => {
+  const inputFile = "./tests/data/search_regex-tests.md";
+  const options = {
+    config: {
+      default: true,
+      "search-replace": {
+        rules: [
+          {
+            name: "use-case-insensitive",
+            message: "Use 'i' flag.",
+            search: "/abc/g",
+            replace: "/abc/ig",
+          },
+        ],
+      },
+    },
+    customRules: [searchReplace],
+    resultVersion: 3,
+    files: [inputFile],
+  };
+  t.is(
+    ...applyFixes(
+      inputFile,
+      markdownlint.sync(options),
+      "search_regex-tests.out.md"
+    ),
+    "Output doesn't match."
+  );
+});
+
+test("replaceLineFix", (t) => {
+  const inputFile = "./tests/data/replaceLine-tests.md";
+  const options = {
+    config: {
+      default: true,
+      "search-replace": {
+        rules: [
+          {
+            name: "test",
+            message: "test",
+            searchPattern: "^/\\.\\.\\.(.*)\\.\\.\\.$/mg",
+            replace: "-- $1 --",
+          },
+        ],
+      },
+    },
+    customRules: [searchReplace],
+    resultVersion: 3,
+    files: [inputFile],
+  };
+  t.is(
+    ...applyFixes(
+      inputFile,
+      markdownlint.sync(options),
+      "replaceLineFix.out.md"
+    ),
+    "Output doesn't match."
+  );
+});
