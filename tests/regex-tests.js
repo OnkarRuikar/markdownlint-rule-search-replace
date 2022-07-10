@@ -94,3 +94,30 @@ test("replaceLineFix", (t) => {
     "Output doesn't match."
   );
 });
+
+test("multilineSearch", (t) => {
+  const inputFile = "./tests/data/options-tests.md";
+  const options = {
+    config: {
+      default: true,
+      "search-replace": {
+        rules: [
+          {
+            name: "test",
+            message: "test",
+            searchPattern: "/some text\\nsome -- text\\nsome/mg",
+            replace: "not applicable",
+          },
+        ],
+      },
+    },
+    customRules: [searchReplace],
+    resultVersion: 3,
+    files: [inputFile],
+  };
+  const result = markdownlint.sync(options);
+  const expected = `./tests/data/options-tests.md: 3: search-replace Custom rule [test: test] [Context: "column: 4 text:'some text'"]
+./tests/data/options-tests.md: 4: search-replace Custom rule [test: test] [Context: "column: 1 text:'some -- text'"]
+./tests/data/options-tests.md: 5: search-replace Custom rule [test: test] [Context: "column: 1 text:'some'"]`;
+  t.is(result.toString(), expected, "Unexpected result.");
+});

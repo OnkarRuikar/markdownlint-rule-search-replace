@@ -55,11 +55,11 @@ const gatHtmlCommentRanges = (content, lines) => {
 
     if (match[0].includes("\n")) {
       const parts = match[0].split("\n");
-      for (const [i, p] of parts.entries()) {
+      for (const [i, part] of parts.entries()) {
         if (i === 0) {
-          ranges.push([...pos, p.length]);
+          ranges.push([...pos, part.length]);
         } else {
-          ranges.push([pos[0] + i, 0, p.length]);
+          ranges.push([pos[0] + i, 0, part.length]);
         }
       }
     } else {
@@ -161,12 +161,25 @@ module.exports = {
         const match = result[0];
         const [lineNo, columnNo] = getLocation(result.index, params.lines);
 
-        let replacement = "";
-        replacement = rule.search
-          ? rule.replace
-          : match.replace(new RegExp(regex), rule.replace);
-
-        report(rule, match, lineNo, columnNo, replacement);
+        // The parent project 'markdownlint' processes markdown line by line.
+        // It doesn't allow multiline fixes. The line ending('\n') can't be removed from plugins.
+        // That is why when the 'match' is multiline we can't suggest fix for it.
+        // However, we can report error for each line.
+        if (match.includes("\n")) {
+          const parts = match.split("\n");
+          for (const [i, part] of parts.entries()) {
+            if (i === 0) {
+              report(rule, part, lineNo, columnNo);
+            } else {
+              report(rule, part, lineNo + i, 0);
+            }
+          }
+        } else {
+          const replacement = rule.search
+            ? rule.replace
+            : match.replace(new RegExp(regex), rule.replace);
+          report(rule, match, lineNo, columnNo, replacement);
+        }
       }
     }
   },
