@@ -124,7 +124,7 @@ module.exports = {
         range: [columnNo + 1, match.length],
       };
 
-      if (typeof replacement !== "undefined") {
+      if (typeof replacement !== "undefined" && replacement !== null) {
         options.fixInfo = {
           lineNumber: lineNo + 1,
           editColumn: columnNo + 1,
@@ -175,9 +175,12 @@ module.exports = {
             }
           }
         } else {
-          const replacement = rule.search
-            ? rule.replace
-            : match.replace(new RegExp(regex), rule.replace);
+          let replacement = null;
+          if (typeof rule.replace !== "undefined") {
+            replacement = rule.search
+              ? rule.replace
+              : match.replace(new RegExp(regex), rule.replace);
+          }
           report(rule, match, lineNo, columnNo, replacement);
         }
       }

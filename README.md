@@ -70,7 +70,7 @@ Here,
   - `message`: corresponding message
   - `search`: text to search
   - `searchPattern`: regex pattern to search. Include flags as well, as if you are defining a regex literal in JavaScript, e.g. `/http/g`.
-  - `replace`: The replacement string, e.g. `https`. Regex properties like `$1` can be used if `searchPattern` is being used.
+  - `replace`: Optional. The replacement string, e.g. `https`. Regex properties like `$1` can be used if `searchPattern` is being used.
   - `skipCode`: Optional. All code(inline and block), which is inside backticks, will be skipped.
 
 Note, `search` and `searchPattern` are interchangeable. The property `search` is used if both are supplied.
