@@ -31,7 +31,7 @@
     "markdownlint-rule-helpers": "~0.17.2"
   },
   "devDependencies": {
-    "ava": "^4.3.0",
+    "ava": "^5.0.1",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-es": "^4.1.0",
