@@ -164,3 +164,6 @@ markdownlint(options, function callback(err, result) {
   }
 });
 ```
+## Projects using this custom rule
+
+- MDN Web Docs - [code](https://github.com/mdn/content/blob/main/.markdownlint-cli2.jsonc#L125)
