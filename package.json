@@ -28,7 +28,7 @@
     "node": ">=14"
   },
   "dependencies": {
-    "markdownlint-rule-helpers": "~0.17.2"
+    "markdownlint-rule-helpers": "~0.18.0"
   },
   "devDependencies": {
     "ava": "^5.0.1",
