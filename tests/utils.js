@@ -11,7 +11,7 @@ function applyFixes(file, result, expected) {
   const fixes = result[file].filter((error) => error.fixInfo);
   result = helper.applyFixes(originalText, fixes);
   expected = fs.readFileSync(dataPath + expected, fsOptions);
-  return [result, expected];
+  return [expected, result];
 }
 
 module.exports.applyFixes = applyFixes;
