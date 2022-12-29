@@ -1,0 +1,20 @@
+name: Check PR contents
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on:  ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install Dependencies
+        run: npm install --no-package-lock
+      - name: Run tests
+        run: npm test
