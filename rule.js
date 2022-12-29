@@ -47,7 +47,7 @@ const getLocation = (pos, lines) => {
  * @returns {number[][]} An array of tuple [lineNo, column, length].
  */
 const gatHtmlCommentRanges = (content, lines) => {
-  const regex = /<!--[.\n]*-->/gm;
+  const regex = /<!--[.\n\s]*-->/gm;
   const ranges = [];
   let match = null;
   while ((match = regex.exec(content)) !== null) {
