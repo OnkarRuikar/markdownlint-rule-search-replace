@@ -124,7 +124,7 @@ module.exports = {
         range: [columnNo + 1, match.length],
       };
 
-      if (typeof replacement !== "undefined" && replacement !== null) {
+      if (replacement !== undefined && replacement !== null) {
         options.fixInfo = {
           lineNumber: lineNo + 1,
           editColumn: columnNo + 1,
@@ -139,12 +139,42 @@ module.exports = {
       return;
     }
 
+    let rules = params.config.rules;
     const content = params.lines.join("\n");
     const lineMetadata = helpers.getLineMetadata(params);
     const codeRanges = helpers.codeBlockAndSpanRanges(params, lineMetadata);
     const htmlCommentRanges = gatHtmlCommentRanges(content, params.lines);
 
-    for (const rule of params.config.rules) {
+    // expand multivalue rules
+    const listRules = [];
+    for (const rule of rules) {
+      if (
+        (rule.search && Array.isArray(rule.search)) ||
+        (rule.searchPattern && Array.isArray(rule.searchPattern))
+      ) {
+        listRules.push(rule);
+      }
+    }
+    rules = rules.filter((r) => !listRules.includes(r));
+    for (const rule of listRules) {
+      if (rule.search) {
+        for (const [index, word] of rule.search.entries()) {
+          const clone = { ...rule };
+          clone.search = word;
+          clone.replace = rule.replace[index];
+          rules.push(clone);
+        }
+      } else if (rule.searchPattern) {
+        for (const [index, pattern] of rule.searchPattern.entries()) {
+          const clone = { ...rule };
+          clone.searchPattern = pattern;
+          clone.replace = rule.replace[index];
+          rules.push(clone);
+        }
+      }
+    }
+
+    for (const rule of rules) {
       const regex = rule.search
         ? new RegExp(escapeForRegExp(rule.search), "g")
         : stringToRegex(rule.searchPattern);
@@ -176,7 +206,7 @@ module.exports = {
           }
         } else {
           let replacement = null;
-          if (typeof rule.replace !== "undefined") {
+          if (rule.replace !== undefined) {
             replacement = rule.search
               ? rule.replace
               : match.replace(new RegExp(regex), rule.replace);
