@@ -16,7 +16,7 @@ For example,
 
 Or specific cases like replace three backticks with one. [[ref](https://github.com/DavidAnson/markdownlint/issues/411)]
 
-Or ban certain words.
+Or ban certain words e.g. "wtf".
 
 In such scenarios the `markdownlint-rule-search-replace` rule can be used to flag or fix such occurrences.
 
@@ -66,11 +66,11 @@ Here,
 - `search-replace`: The rule configuration object.
 - `rules`: An array of search-replace definitions.
 - search-replace definition: defines search term/pattern and replacement.
-  - `name`: name of the definition
-  - `message`: corresponding message
-  - `search`: text to search
-  - `searchPattern`: regex pattern to search. Include flags as well, as if you are defining a regex literal in JavaScript, e.g. `/http/g`.
-  - `replace`: Optional. The replacement string, e.g. `https`. Regex properties like `$1` can be used if `searchPattern` is being used.
+  - `name`: name of the definition.
+  - `message`: corresponding message.
+  - `search`: text or array of texts to search
+  - `searchPattern`: regex pattern or array of patterns to search. Include flags as well, as if you are defining a regex literal in JavaScript, e.g. `/http/g`.
+  - `replace`: Optional. The replacement string(s), e.g. `https`. Regex properties like `$1` can be used if `searchPattern` is being used.
   - `skipCode`: Optional. All code(inline and block), which is inside backticks, will be skipped.
 
 Note, `search` and `searchPattern` are interchangeable. The property `search` is used if both are supplied.
@@ -94,6 +94,27 @@ In patterns, to escape characters use `\\`. For example,
 ```
 
 This will replace line `...abcd...` with `-- abcd --`.
+
+A list of words and corresponding list of replacements can be provided in a single rule:
+
+```json
+{
+  "default": true,
+  "search-replace": {
+    "rules": [
+      {
+        "name": "bad-spellings",
+        "message": "Incorrect spelling",
+        "search": ["e-mail", "wtf", "web site"],
+        "replace": ["email", , "website"],
+        "skipCode": false
+      }
+    ]
+  }
+}
+```
+
+This is a good way to group related search replace terms in one rule. Make sure the replacements are at same indices as the corresponding search terms. In above example, the word "wtf" will get flagged but won't be auto fixed. Use empty replacement(`""`) if you wish to remove it.
 
 ### Disable rule options
 
@@ -164,6 +185,7 @@ markdownlint(options, function callback(err, result) {
   }
 });
 ```
+
 ## Projects using this custom rule
 
 - MDN Web Docs - [code](https://github.com/mdn/content/blob/main/.markdownlint-cli2.jsonc#L125)

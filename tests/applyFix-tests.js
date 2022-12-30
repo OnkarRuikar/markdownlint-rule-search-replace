@@ -15,7 +15,7 @@ test("applyFixDefault", (t) => {
         rules: [
           {
             name: "m-dash",
-            message: "Don't use '--'.",
+            message: "Don't use '--'",
             search: "--",
             replace: "—",
           },
@@ -44,7 +44,7 @@ test("applyFixRegex", (t) => {
         rules: [
           {
             name: "m-dash",
-            message: "Don't use '--'.",
+            message: "Don't use '--'",
             searchPattern: "/--/g",
             replace: "—",
           },
@@ -73,7 +73,7 @@ test("applyFixSkipCode", (t) => {
         rules: [
           {
             name: "m-dash",
-            message: "Don't use '--'.",
+            message: "Don't use '--'",
             search: "--",
             replace: "—",
             skipCode: true,
@@ -104,7 +104,7 @@ test("applyFixReplaceBackticks", (t) => {
         rules: [
           {
             name: "m-dash",
-            message: "Don't use '--'.",
+            message: "Don't use '--'",
             search: "````",
             replace: "```",
             skipCode: true,
@@ -134,7 +134,7 @@ test("applyFixWithoutReplace", (t) => {
         rules: [
           {
             name: "m-dash",
-            message: "Don't use '--'.",
+            message: "Don't use '--'",
             search: "--",
             skipCode: true,
           },
@@ -159,7 +159,7 @@ test("applyPatternFixWithoutReplace", (t) => {
         rules: [
           {
             name: "m-dash",
-            message: "Don't use '--'.",
+            message: "Don't use '--'",
             searchPattern: "/--/g",
             skipCode: true,
           },
@@ -172,6 +172,70 @@ test("applyPatternFixWithoutReplace", (t) => {
   };
   t.is(
     ...applyFixes(inputFile, markdownlint.sync(options), "options-tests.md"),
+    "Output doesn't match."
+  );
+});
+
+test("applyFixOnSearchListDefault", (t) => {
+  const inputFile2 = "./tests/data/multivalue_search.md";
+  const options = {
+    config: {
+      default: true,
+      "search-replace": {
+        rules: [
+          {
+            name: "bad-spellings",
+            message: "Incorrect spelling",
+            search: ["e-mail", "ohh no", "web site"],
+            // eslint-disable-next-line no-sparse-arrays
+            replace: ["email", , "website"],
+            skipCode: false,
+          },
+        ],
+      },
+    },
+    customRules: [searchReplace],
+    resultVersion: 3,
+    files: [inputFile2],
+  };
+  t.is(
+    ...applyFixes(
+      inputFile2,
+      markdownlint.sync(options),
+      "applyMultivalueFixDefault.out.md"
+    ),
+    "Output doesn't match."
+  );
+});
+
+test("applyFixOnSearchListRegex", (t) => {
+  const inputFile2 = "./tests/data/multivalue_search.md";
+  const options = {
+    config: {
+      default: true,
+      "search-replace": {
+        rules: [
+          {
+            name: "bad-spellings",
+            message: "Incorrect spelling",
+            searchPattern: ["/e-mail/g", "/ohh no/gi", "/web site/g"],
+            // eslint-disable-next-line no-sparse-arrays
+            replace: ["email", , "website"],
+            skipCode: false,
+          },
+        ],
+      },
+    },
+    customRules: [searchReplace],
+    resultVersion: 3,
+    files: [inputFile2],
+  };
+  t.is(
+    ...applyFixes(
+      inputFile2,
+      markdownlint.sync(options),
+      "applyMultivalueFixDefault.out.md"
+    ),
     "Output doesn't match."
   );
 });
