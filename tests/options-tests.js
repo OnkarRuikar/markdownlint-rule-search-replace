@@ -8,6 +8,44 @@ const searchReplace = require("../rule");
 
 const inputFile = "./tests/data/options-tests.md";
 
+test("checkMandatoryProerties", (t) => {
+  let options = {
+    config: {
+      default: true,
+      "search-replace": {
+        rules: [{}],
+      },
+    },
+    customRules: [searchReplace],
+    resultVersion: 3,
+    files: [inputFile],
+  };
+
+  t.throws(() => markdownlint.sync(options), {
+    message: "Provide either `search` or `searchPattern` option.",
+  });
+
+  options = {
+    config: {
+      default: true,
+      "search-replace": {
+        rules: [
+          {
+            searchpattern: "/abc/g",
+          },
+        ],
+      },
+    },
+    customRules: [searchReplace],
+    resultVersion: 3,
+    files: [inputFile],
+  };
+
+  t.throws(() => markdownlint.sync(options), {
+    message: "Provide either `search` or `searchPattern` option.",
+  });
+});
+
 test("checkPropertiesDefault", (t) => {
   const options = {
     config: {

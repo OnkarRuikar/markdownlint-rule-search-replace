@@ -175,6 +175,10 @@ module.exports = {
     }
 
     for (const rule of rules) {
+      if (!rule.search && !rule.searchPattern) {
+        throw new Error("Provide either `search` or `searchPattern` option.");
+      }
+
       const regex = rule.search
         ? new RegExp(escapeForRegExp(rule.search), "g")
         : stringToRegex(rule.searchPattern);
