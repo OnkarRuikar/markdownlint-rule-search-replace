@@ -73,7 +73,8 @@ Here,
   - `replace`: Optional. The replacement string(s), e.g. `https`. Regex properties like `$1` can be used if `searchPattern` is being used.
   - `skipCode`: Optional. All code(inline and block), which is inside backticks, will be skipped.
 
-Note, `search` and `searchPattern` are interchangeable. The property `search` is used if both are supplied.
+Properties are case-sensitive and are in camel case.\
+**Note:** `search` and `searchPattern` are interchangeable. The property `search` is used if both are supplied.
 
 In patterns, to escape characters use `\\`. For example,
 
