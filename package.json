@@ -38,7 +38,7 @@
     "eslint-plugin-es": "^4.1.0",
     "eslint-plugin-jsdoc": "^40.0.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-unicorn": "^45.0.0",
+    "eslint-plugin-unicorn": "^46.0.0",
     "markdownlint": "^0.27.0",
     "prettier": "^2.7.1"
   }
