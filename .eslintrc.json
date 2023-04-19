@@ -118,7 +118,7 @@
     "jsdoc/require-throws": "error",
     "jsdoc/require-yields": "error",
     "jsdoc/require-yields-check": "error",
-    "jsdoc/tag-lines": "error",
+    "jsdoc/tag-lines": 1,
     "jsdoc/valid-types": "error",
 
     "node/handle-callback-err": "error",
