@@ -97,6 +97,7 @@
     "jsdoc/no-bad-blocks": "error",
     "jsdoc/no-defaults": "error",
     "jsdoc/no-multi-asterisks": "error",
+    "jsdoc/newline-after-description": 1,
     "jsdoc/no-undefined-types": "error",
     "jsdoc/require-asterisk-prefix": "error",
     "jsdoc/require-description": "error",
