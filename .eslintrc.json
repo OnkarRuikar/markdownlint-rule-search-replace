@@ -30,6 +30,7 @@
   "plugins": ["es", "jsdoc", "node", "unicorn"],
   "reportUnusedDisableDirectives": true,
   "rules": {
+    "jsdoc/tag-lines": 0,
     "array-bracket-spacing": "off",
     "array-element-newline": "off",
     "capitalized-comments": "off",
@@ -93,11 +94,9 @@
     "jsdoc/implements-on-classes": "error",
     "jsdoc/match-description": "error",
     "jsdoc/multiline-blocks": "error",
-    "jsdoc/newline-after-description": "error",
     "jsdoc/no-bad-blocks": "error",
     "jsdoc/no-defaults": "error",
     "jsdoc/no-multi-asterisks": "error",
-    "jsdoc/newline-after-description": 1,
     "jsdoc/no-undefined-types": "error",
     "jsdoc/require-asterisk-prefix": "error",
     "jsdoc/require-description": "error",
@@ -118,7 +117,6 @@
     "jsdoc/require-throws": "error",
     "jsdoc/require-yields": "error",
     "jsdoc/require-yields-check": "error",
-    "jsdoc/tag-lines": 1,
     "jsdoc/valid-types": "error",
 
     "node/handle-callback-err": "error",
