@@ -103,6 +103,43 @@ test("checkPropertiesRegex", (t) => {
 });
 
 test("checkPropertiesSkipCode", (t) => {
+  let options = {
+    config: {
+      default: true,
+      "search-replace": {
+        rules: [
+          {
+            name: "m-dash",
+            message: "Don't use '--'.",
+            search: "--",
+            replace: "—",
+          },
+        ],
+      },
+    },
+    customRules: [searchReplace],
+    resultVersion: 3,
+    files: [inputFile],
+  };
+
+  // Check skip via searchInCode: "only"
+  options.config["search-replace"].rules[0].searchInCode = "skip";
+  const check = (options) => {
+    const result = markdownlint.sync(options);
+    const expected = `./tests/data/options-tests.md: 3: search-replace Custom rule [m-dash: Don't use '--'.] [Context: "column: 1 text:'--'"]
+./tests/data/options-tests.md: 4: search-replace Custom rule [m-dash: Don't use '--'.] [Context: "column: 6 text:'--'"]
+./tests/data/options-tests.md: 5: search-replace Custom rule [m-dash: Don't use '--'.] [Context: "column: 11 text:'--'"]`;
+    t.is(result.toString(), expected, "Unexpected result.");
+  };
+  check(options);
+
+  // Check skip via skipCode: true
+  delete options.config["search-replace"].rules[0].searchInCode;
+  options.config["search-replace"].rules[0].skipCode = true;
+  check(options);
+});
+
+test("checkPropertiesSearchInCodeOnly", (t) => {
   const options = {
     config: {
       default: true,
@@ -113,7 +150,7 @@ test("checkPropertiesSkipCode", (t) => {
             message: "Don't use '--'.",
             search: "--",
             replace: "—",
-            skipCode: true,
+            searchInCode: "only",
           },
         ],
       },
@@ -123,10 +160,66 @@ test("checkPropertiesSkipCode", (t) => {
     files: [inputFile],
   };
   const result = markdownlint.sync(options);
-  const expected = `./tests/data/options-tests.md: 3: search-replace Custom rule [m-dash: Don't use '--'.] [Context: "column: 1 text:'--'"]
-./tests/data/options-tests.md: 4: search-replace Custom rule [m-dash: Don't use '--'.] [Context: "column: 6 text:'--'"]
-./tests/data/options-tests.md: 5: search-replace Custom rule [m-dash: Don't use '--'.] [Context: "column: 11 text:'--'"]`;
+  const expected = `./tests/data/options-tests.md: 6: search-replace Custom rule [m-dash: Don't use '--'.] [Context: "column: 18 text:'--'"]
+./tests/data/options-tests.md: 9: search-replace Custom rule [m-dash: Don't use '--'.] [Context: "column: 15 text:'--'"]`
   t.is(result.toString(), expected, "Unexpected result.");
+});
+
+test("checkPropertiesSearchInCodeConflict", (t) => {
+  ["all", "only"].forEach(setting => {
+    const options = {
+      config: {
+        default: true,
+        "search-replace": {
+          rules: [
+            {
+              name: "m-dash",
+              message: "Don't use '--'.",
+              search: "--",
+              replace: "—",
+              skipCode: true,
+              searchInCode: setting
+            },
+          ],
+        },
+      },
+      customRules: [searchReplace],
+      resultVersion: 3,
+      files: [inputFile],
+    };
+
+    t.throws(() => markdownlint.sync(options), {
+      message: `Option \`searchInCode\` = \`"${setting}"\` conflicts with \`skipCode\` = \`true\`.`,
+    });
+  });
+});
+
+test("checkPropertiesSearchInCodeInvalid", (t) => {
+  ["", false, "yes", { "asd": true }].forEach(setting => {
+    const options = {
+      config: {
+        default: true,
+        "search-replace": {
+          rules: [
+            {
+              name: "m-dash",
+              message: "Don't use '--'.",
+              search: "--",
+              replace: "—",
+              searchInCode: setting
+            },
+          ],
+        },
+      },
+      customRules: [searchReplace],
+      resultVersion: 3,
+      files: [inputFile],
+    };
+
+    t.throws(() => markdownlint.sync(options), {
+      message: `Invalid value \`${setting}\` provided for \`searchInCode\`, must be one of \`"all"\`, \`"only"\` or \`"skip"\`.`,
+    });
+  });
 });
 
 test("checkPropertiesSearchList", (t) => {

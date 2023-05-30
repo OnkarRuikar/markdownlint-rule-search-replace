@@ -179,13 +179,27 @@ module.exports = {
         throw new Error("Provide either `search` or `searchPattern` option.");
       }
 
+      if (rule.searchInCode !== undefined) {
+        if (!["all", "only", "skip"].includes(rule.searchInCode)) {
+          throw new Error(`Invalid value \`${rule.searchInCode}\` provided for \`searchInCode\`, must be one of \`"all"\`, \`"only"\` or \`"skip"\`.`);
+        }
+
+        if (rule.skipCode && rule.searchInCode != "skip") {
+          throw new Error(`Option \`searchInCode\` = \`"${rule.searchInCode}"\` conflicts with \`skipCode\` = \`${rule.skipCode}\`.`)
+        }
+      }
+
       const regex = rule.search
         ? new RegExp(escapeForRegExp(rule.search), "g")
         : stringToRegex(rule.searchPattern);
       let result = null;
       while ((result = regex.exec(content)) !== null) {
-        if (rule.skipCode && isCode(result.index, codeRanges, params.lines)) {
-          continue;
+        if (isCode(result.index, codeRanges, params.lines)) {
+          if (rule.skipCode || rule.searchInCode == "skip")
+            continue;
+        } else {
+          if (rule.searchInCode == "only")
+            continue;
         }
 
         if (isHTMLComment(result.index, htmlCommentRanges, params.lines)) {

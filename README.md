@@ -71,7 +71,8 @@ Here,
   - `search`: text or array of texts to search
   - `searchPattern`: regex pattern or array of patterns to search. Include flags as well, as if you are defining a regex literal in JavaScript, e.g. `/http/g`.
   - `replace`: Optional. The replacement string(s), e.g. `https`. Regex properties like `$1` can be used if `searchPattern` is being used.
-  - `skipCode`: Optional. All code(inline and block), which is inside backticks, will be skipped.
+  - `searchInCode` Optional. When set to `"skip"` all code(inline and block), which is inside backticks, will be skipped. When set to `"only"` only code will be searched. Default is `"all"` (both code and non-code is searched).
+  - `skipCode`: Optional. Equivalent to `"searchInCode": "skip"` when set to `true`.
 
 Properties are case-sensitive and are in camel case.\
 **Note:** `search` and `searchPattern` are interchangeable. The property `search` is used if both are supplied.
