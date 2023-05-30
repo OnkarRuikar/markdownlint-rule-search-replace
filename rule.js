@@ -210,7 +210,7 @@ module.exports = {
           }
         } else {
           let replacement = null;
-          if (rule.replace !== undefined) {
+          if (rule.replace !== undefined && rule.replace !== null) {
             replacement = rule.search
               ? rule.replace
               : match.replace(new RegExp(regex), rule.replace);
