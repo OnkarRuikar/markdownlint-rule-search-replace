@@ -107,7 +107,7 @@ A list of words and corresponding list of replacements can be provided in a sing
         "name": "bad-spellings",
         "message": "Incorrect spelling",
         "search": ["e-mail", "wtf", "web site"],
-        "replace": ["email", , "website"],
+        "replace": ["email", null, "website"],
         "skipCode": false
       }
     ]

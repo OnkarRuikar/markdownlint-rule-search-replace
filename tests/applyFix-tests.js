@@ -210,7 +210,7 @@ test("applyFixOnSearchListDefault", (t) => {
 
 test("applyFixOnSearchListRegex", (t) => {
   const inputFile2 = "./tests/data/multivalue_search.md";
-  [undefined, null].forEach(no_replacement => {
+  for (const noReplacement of [undefined, null]) {
     const options = {
       config: {
         default: true,
@@ -220,7 +220,7 @@ test("applyFixOnSearchListRegex", (t) => {
               name: "bad-spellings",
               message: "Incorrect spelling",
               searchPattern: ["/e-mail/g", "/ohh no/gi", "/web site/g"],
-              replace: ["email", no_replacement, "website"],
+              replace: ["email", noReplacement, "website"],
               skipCode: false,
             },
           ],
@@ -238,5 +238,5 @@ test("applyFixOnSearchListRegex", (t) => {
       ),
       "Output doesn't match."
     );
-  });
+  }
 });
