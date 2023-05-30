@@ -179,13 +179,17 @@ module.exports = {
         throw new Error("Provide either `search` or `searchPattern` option.");
       }
 
-      if (rule.searchInCode !== undefined) {
-        if (!["all", "only", "skip"].includes(rule.searchInCode)) {
-          throw new Error(`Invalid value \`${rule.searchInCode}\` provided for \`searchInCode\`, must be one of \`"all"\`, \`"only"\` or \`"skip"\`.`);
+      if (rule.searchScope !== undefined) {
+        if (rule.skipCode !== undefined) {
+          throw new Error(
+            "Both `searchScope` and `skipCode` specified, `skipCode` is deprecated, use `searchScope` instead."
+          );
         }
 
-        if (rule.skipCode && rule.searchInCode != "skip") {
-          throw new Error(`Option \`searchInCode\` = \`"${rule.searchInCode}"\` conflicts with \`skipCode\` = \`${rule.skipCode}\`.`)
+        if (!["all", "code", "text"].includes(rule.searchScope)) {
+          throw new Error(
+            `Invalid value \`${rule.searchScope}\` provided for \`searchScope\`, must be one of \`all\`, \`code\` or \`text\`.`
+          );
         }
       }
 
@@ -195,12 +199,8 @@ module.exports = {
       let result = null;
       while ((result = regex.exec(content)) !== null) {
         if (isCode(result.index, codeRanges, params.lines)) {
-          if (rule.skipCode || rule.searchInCode == "skip")
-            continue;
-        } else {
-          if (rule.searchInCode == "only")
-            continue;
-        }
+          if (rule.skipCode || rule.searchScope === "text") continue;
+        } else if (rule.searchScope === "code") continue;
 
         if (isHTMLComment(result.index, htmlCommentRanges, params.lines)) {
           continue;

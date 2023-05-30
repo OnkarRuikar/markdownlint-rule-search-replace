@@ -48,7 +48,7 @@ For example,
         "message": "Do not use three dots '...' for ellipsis.",
         "search": "...",
         "replace": "…",
-        "skipCode": true
+        "searchScope": "text"
       },
       {
         "name": "curly-double-quotes",
@@ -71,8 +71,11 @@ Here,
   - `search`: text or array of texts to search
   - `searchPattern`: regex pattern or array of patterns to search. Include flags as well, as if you are defining a regex literal in JavaScript, e.g. `/http/g`.
   - `replace`: Optional. The replacement string(s), e.g. `https`. Regex properties like `$1` can be used if `searchPattern` is being used.
-  - `searchInCode` Optional. When set to `"skip"` all code(inline and block), which is inside backticks, will be skipped. When set to `"only"` only code will be searched. Default is `"all"` (both code and non-code is searched).
-  - `skipCode`: Optional. Equivalent to `"searchInCode": "skip"` when set to `true`.
+  - `searchScope` Optional. Scope to perform the search in.
+    - `all`: Default. Search in all Markdown content.
+    - `code`: Search only in code (block and inline). That is code inside code fences and inline backticks.
+    - `text`: Search only in markdown text, skip code.
+  - `skipCode`: Optional. All code(inline and block), which is inside backticks, will be skipped. _This property is deprecated use `searchScope` instead._
 
 Properties are case-sensitive and are in camel case.\
 **Note:** `search` and `searchPattern` are interchangeable. The property `search` is used if both are supplied.
@@ -109,7 +112,7 @@ A list of words and corresponding list of replacements can be provided in a sing
         "message": "Incorrect spelling",
         "search": ["e-mail", "wtf", "web site"],
         "replace": ["email", null, "website"],
-        "skipCode": false
+        "searchScope": "all"
       }
     ]
   }
