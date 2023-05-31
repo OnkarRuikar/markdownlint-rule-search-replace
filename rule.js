@@ -179,14 +179,28 @@ module.exports = {
         throw new Error("Provide either `search` or `searchPattern` option.");
       }
 
+      if (rule.searchScope !== undefined) {
+        if (rule.skipCode !== undefined) {
+          throw new Error(
+            "Both `searchScope` and `skipCode` specified, `skipCode` is deprecated, use `searchScope` instead."
+          );
+        }
+
+        if (!["all", "code", "text"].includes(rule.searchScope)) {
+          throw new Error(
+            `Invalid value \`${rule.searchScope}\` provided for \`searchScope\`, must be one of \`all\`, \`code\` or \`text\`.`
+          );
+        }
+      }
+
       const regex = rule.search
         ? new RegExp(escapeForRegExp(rule.search), "g")
         : stringToRegex(rule.searchPattern);
       let result = null;
       while ((result = regex.exec(content)) !== null) {
-        if (rule.skipCode && isCode(result.index, codeRanges, params.lines)) {
-          continue;
-        }
+        if (isCode(result.index, codeRanges, params.lines)) {
+          if (rule.skipCode || rule.searchScope === "text") continue;
+        } else if (rule.searchScope === "code") continue;
 
         if (isHTMLComment(result.index, htmlCommentRanges, params.lines)) {
           continue;
