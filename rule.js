@@ -107,6 +107,32 @@ const isCode = (pos, ranges, lines) => isPartOf(pos, ranges, lines);
  */
 const isHTMLComment = (pos, ranges, lines) => isPartOf(pos, ranges, lines);
 
+/**
+ * Check rule definition.
+ *
+ * @param {Object} rule A rule object.
+ * @throws {Error} The error in rule definition.
+ */
+const validateRule = (rule) => {
+  if (!rule.search && !rule.searchPattern) {
+    throw new Error("Provide either `search` or `searchPattern` option.");
+  }
+
+  if (rule.searchScope !== undefined) {
+    if (rule.skipCode !== undefined) {
+      throw new Error(
+        "Both `searchScope` and `skipCode` specified, `skipCode` is deprecated, use `searchScope` instead."
+      );
+    }
+
+    if (!["all", "code", "text"].includes(rule.searchScope)) {
+      throw new Error(
+        `Invalid value \`${rule.searchScope}\` provided for \`searchScope\`, must be one of \`all\`, \`code\` or \`text\`.`
+      );
+    }
+  }
+};
+
 module.exports = {
   names: ["search-replace"],
   description: "Custom rule",
@@ -175,23 +201,7 @@ module.exports = {
     }
 
     for (const rule of rules) {
-      if (!rule.search && !rule.searchPattern) {
-        throw new Error("Provide either `search` or `searchPattern` option.");
-      }
-
-      if (rule.searchScope !== undefined) {
-        if (rule.skipCode !== undefined) {
-          throw new Error(
-            "Both `searchScope` and `skipCode` specified, `skipCode` is deprecated, use `searchScope` instead."
-          );
-        }
-
-        if (!["all", "code", "text"].includes(rule.searchScope)) {
-          throw new Error(
-            `Invalid value \`${rule.searchScope}\` provided for \`searchScope\`, must be one of \`all\`, \`code\` or \`text\`.`
-          );
-        }
-      }
+      validateRule(rule);
 
       const regex = rule.search
         ? new RegExp(escapeForRegExp(rule.search), "g")

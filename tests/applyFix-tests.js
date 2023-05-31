@@ -1,9 +1,8 @@
 "use strict";
 
 const test = require("ava").default;
-const markdownlint = require("markdownlint");
 const searchReplace = require("../rule");
-const applyFixes = require("./utils").applyFixes;
+const checkFix = require("./utils").checkFix;
 
 const inputFile = "./tests/data/options-tests.md";
 
@@ -26,14 +25,8 @@ test("applyFixDefault", (t) => {
     resultVersion: 3,
     files: [inputFile],
   };
-  t.is(
-    ...applyFixes(
-      inputFile,
-      markdownlint.sync(options),
-      "applyFixDefault.out.md"
-    ),
-    "Output doesn't match."
-  );
+
+  checkFix(t, options, inputFile, "applyFixDefault.out.md");
 });
 
 test("applyFixRegex", (t) => {
@@ -55,14 +48,8 @@ test("applyFixRegex", (t) => {
     resultVersion: 3,
     files: [inputFile],
   };
-  t.is(
-    ...applyFixes(
-      inputFile,
-      markdownlint.sync(options),
-      "applyFixRegex.out.md"
-    ),
-    "Output doesn't match."
-  );
+
+  checkFix(t, options, inputFile, "applyFixRegex.out.md");
 });
 
 test("applyFixSkipCode", (t) => {
@@ -85,14 +72,8 @@ test("applyFixSkipCode", (t) => {
     resultVersion: 3,
     files: [inputFile],
   };
-  t.is(
-    ...applyFixes(
-      inputFile,
-      markdownlint.sync(options),
-      "applyFixSkipCode.out.md"
-    ),
-    "Output doesn't match."
-  );
+
+  checkFix(t, options, inputFile, "applyFixSkipCode.out.md");
 });
 
 test("applyFixReplaceBackticks", (t) => {
@@ -116,14 +97,8 @@ test("applyFixReplaceBackticks", (t) => {
     resultVersion: 3,
     files: [inputFile2],
   };
-  t.is(
-    ...applyFixes(
-      inputFile2,
-      markdownlint.sync(options),
-      "applyFixReplaceBackticks.out.md"
-    ),
-    "Output doesn't match."
-  );
+
+  checkFix(t, options, inputFile2, "applyFixReplaceBackticks.out.md");
 });
 
 test("applyFixWithoutReplace", (t) => {
@@ -145,10 +120,8 @@ test("applyFixWithoutReplace", (t) => {
     resultVersion: 3,
     files: [inputFile],
   };
-  t.is(
-    ...applyFixes(inputFile, markdownlint.sync(options), "options-tests.md"),
-    "Output doesn't match."
-  );
+
+  checkFix(t, options, inputFile, "options-tests.md");
 });
 
 test("applyPatternFixWithoutReplace", (t) => {
@@ -170,10 +143,8 @@ test("applyPatternFixWithoutReplace", (t) => {
     resultVersion: 3,
     files: [inputFile],
   };
-  t.is(
-    ...applyFixes(inputFile, markdownlint.sync(options), "options-tests.md"),
-    "Output doesn't match."
-  );
+
+  checkFix(t, options, inputFile, "options-tests.md");
 });
 
 test("applyFixOnSearchListDefault", (t) => {
@@ -187,8 +158,7 @@ test("applyFixOnSearchListDefault", (t) => {
             name: "bad-spellings",
             message: "Incorrect spelling",
             search: ["e-mail", "ohh no", "web site"],
-            // eslint-disable-next-line no-sparse-arrays
-            replace: ["email", , "website"],
+            replace: ["email", null, "website"],
             skipCode: false,
           },
         ],
@@ -198,14 +168,8 @@ test("applyFixOnSearchListDefault", (t) => {
     resultVersion: 3,
     files: [inputFile2],
   };
-  t.is(
-    ...applyFixes(
-      inputFile2,
-      markdownlint.sync(options),
-      "applyMultivalueFixDefault.out.md"
-    ),
-    "Output doesn't match."
-  );
+
+  checkFix(t, options, inputFile2, "applyMultivalueFixDefault.out.md");
 });
 
 test("applyFixOnSearchListRegex", (t) => {
@@ -230,13 +194,6 @@ test("applyFixOnSearchListRegex", (t) => {
       resultVersion: 3,
       files: [inputFile2],
     };
-    t.is(
-      ...applyFixes(
-        inputFile2,
-        markdownlint.sync(options),
-        "applyMultivalueFixDefault.out.md"
-      ),
-      "Output doesn't match."
-    );
+    checkFix(t, options, inputFile2, "applyMultivalueFixDefault.out.md");
   }
 });

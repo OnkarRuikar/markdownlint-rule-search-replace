@@ -1,9 +1,9 @@
 "use strict";
 
 const test = require("ava").default;
-const markdownlint = require("markdownlint");
 const searchReplace = require("../rule");
-const applyFixes = require("./utils").applyFixes;
+const checkFix = require("./utils").checkFix;
+const check = require("./utils").check;
 
 test("htmlCommentFix", (t) => {
   const inputFile = "./tests/data/html_comment-tests.md";
@@ -25,14 +25,8 @@ test("htmlCommentFix", (t) => {
     resultVersion: 3,
     files: [inputFile],
   };
-  t.is(
-    ...applyFixes(
-      inputFile,
-      markdownlint.sync(options),
-      "htmlCommentFix.out.md"
-    ),
-    "Output doesn't match."
-  );
+
+  checkFix(t, options, inputFile, "htmlCommentFix.out.md");
 });
 
 test("searchRegexFix", (t) => {
@@ -55,14 +49,8 @@ test("searchRegexFix", (t) => {
     resultVersion: 3,
     files: [inputFile],
   };
-  t.is(
-    ...applyFixes(
-      inputFile,
-      markdownlint.sync(options),
-      "search_regex-tests.out.md"
-    ),
-    "Output doesn't match."
-  );
+
+  checkFix(t, options, inputFile, "search_regex-tests.out.md");
 });
 
 test("replaceLineFix", (t) => {
@@ -85,14 +73,8 @@ test("replaceLineFix", (t) => {
     resultVersion: 3,
     files: [inputFile],
   };
-  t.is(
-    ...applyFixes(
-      inputFile,
-      markdownlint.sync(options),
-      "replaceLineFix.out.md"
-    ),
-    "Output doesn't match."
-  );
+
+  checkFix(t, options, inputFile, "replaceLineFix.out.md");
 });
 
 test("multilineSearch", (t) => {
@@ -115,9 +97,9 @@ test("multilineSearch", (t) => {
     resultVersion: 3,
     files: [inputFile],
   };
-  const result = markdownlint.sync(options);
   const expected = `./tests/data/options-tests.md: 3: search-replace Custom rule [test: test] [Context: "column: 4 text:'some text'"]
 ./tests/data/options-tests.md: 4: search-replace Custom rule [test: test] [Context: "column: 1 text:'some -- text'"]
 ./tests/data/options-tests.md: 5: search-replace Custom rule [test: test] [Context: "column: 1 text:'some'"]`;
-  t.is(result.toString(), expected, "Unexpected result.");
+
+  check(t, options, expected);
 });
