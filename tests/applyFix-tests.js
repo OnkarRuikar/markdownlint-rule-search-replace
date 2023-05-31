@@ -210,32 +210,33 @@ test("applyFixOnSearchListDefault", (t) => {
 
 test("applyFixOnSearchListRegex", (t) => {
   const inputFile2 = "./tests/data/multivalue_search.md";
-  const options = {
-    config: {
-      default: true,
-      "search-replace": {
-        rules: [
-          {
-            name: "bad-spellings",
-            message: "Incorrect spelling",
-            searchPattern: ["/e-mail/g", "/ohh no/gi", "/web site/g"],
-            // eslint-disable-next-line no-sparse-arrays
-            replace: ["email", , "website"],
-            skipCode: false,
-          },
-        ],
+  for (const noReplacement of [undefined, null]) {
+    const options = {
+      config: {
+        default: true,
+        "search-replace": {
+          rules: [
+            {
+              name: "bad-spellings",
+              message: "Incorrect spelling",
+              searchPattern: ["/e-mail/g", "/ohh no/gi", "/web site/g"],
+              replace: ["email", noReplacement, "website"],
+              skipCode: false,
+            },
+          ],
+        },
       },
-    },
-    customRules: [searchReplace],
-    resultVersion: 3,
-    files: [inputFile2],
-  };
-  t.is(
-    ...applyFixes(
-      inputFile2,
-      markdownlint.sync(options),
-      "applyMultivalueFixDefault.out.md"
-    ),
-    "Output doesn't match."
-  );
+      customRules: [searchReplace],
+      resultVersion: 3,
+      files: [inputFile2],
+    };
+    t.is(
+      ...applyFixes(
+        inputFile2,
+        markdownlint.sync(options),
+        "applyMultivalueFixDefault.out.md"
+      ),
+      "Output doesn't match."
+    );
+  }
 });
