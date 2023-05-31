@@ -4,6 +4,7 @@
 .idea/
 .markdownlint.json
 .npmrc
+.nvmrc
 .prettierignore
 .prettierrc.json
 .vscode/
