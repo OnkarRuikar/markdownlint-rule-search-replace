@@ -121,13 +121,13 @@ const validateRule = (rule) => {
   if (rule.searchScope !== undefined) {
     if (rule.skipCode !== undefined) {
       throw new Error(
-        "Both `searchScope` and `skipCode` specified, `skipCode` is deprecated, use `searchScope` instead."
+        "Both `searchScope` and `skipCode` specified, `skipCode` is deprecated, use `searchScope` instead.",
       );
     }
 
     if (!["all", "code", "text"].includes(rule.searchScope)) {
       throw new Error(
-        `Invalid value \`${rule.searchScope}\` provided for \`searchScope\`, must be one of \`all\`, \`code\` or \`text\`.`
+        `Invalid value \`${rule.searchScope}\` provided for \`searchScope\`, must be one of \`all\`, \`code\` or \`text\`.`,
       );
     }
   }
@@ -137,7 +137,7 @@ module.exports = {
   names: ["search-replace"],
   description: "Custom rule",
   information: new URL(
-    "https://github.com/OnkarRuikar/markdownlint-rule-search-replace"
+    "https://github.com/OnkarRuikar/markdownlint-rule-search-replace",
   ),
   tags: ["replace"],
 
