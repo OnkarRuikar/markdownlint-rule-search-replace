@@ -113,7 +113,7 @@ const isHTMLComment = (pos, ranges, lines) => isPartOf(pos, ranges, lines);
  * @param {Object} rule A rule object.
  * @throws {Error} The error in rule definition.
  */
-const validateRule = (rule) => {
+const validateAndUpdateRule = (rule) => {
   if (!rule.search && !rule.searchPattern) {
     throw new Error("Provide either `search` or `searchPattern` option.");
   }
@@ -129,6 +129,14 @@ const validateRule = (rule) => {
       throw new Error(
         `Invalid value \`${rule.searchScope}\` provided for \`searchScope\`, must be one of \`all\`, \`code\` or \`text\`.`,
       );
+    }
+  }
+
+  if (rule.information !== undefined) {
+    try {
+      rule.information = new URL(rule.information);
+    } catch {
+      throw new Error(`Provide valid 'information' URL: ${rule.information}`);
     }
   }
 };
@@ -148,6 +156,7 @@ module.exports = {
         detail: rule.name + ": " + rule.message,
         context: `column: ${columnNo + 1} text:'${match}'`,
         range: [columnNo + 1, match.length],
+        information: rule.information,
       };
 
       if (replacement !== undefined && replacement !== null) {
@@ -171,7 +180,7 @@ module.exports = {
     const codeRanges = helpers.codeBlockAndSpanRanges(params, lineMetadata);
     const htmlCommentRanges = gatHtmlCommentRanges(content, params.lines);
 
-    // expand multivalue rules
+    // expand rules with multiple values
     const listRules = [];
     for (const rule of rules) {
       if (
@@ -201,7 +210,7 @@ module.exports = {
     }
 
     for (const rule of rules) {
-      validateRule(rule);
+      validateAndUpdateRule(rule);
 
       const regex = rule.search
         ? new RegExp(escapeForRegExp(rule.search), "g")
