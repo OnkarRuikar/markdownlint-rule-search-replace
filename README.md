@@ -46,6 +46,7 @@ For example,
       {
         "name": "ellipsis",
         "message": "Do not use three dots '...' for ellipsis.",
+        "information": "https://example.com/rules/ellipsis",
         "search": "...",
         "replace": "…",
         "searchScope": "text"
@@ -66,15 +67,16 @@ Here,
 - `search-replace`: The rule configuration object.
 - `rules`: An array of search-replace definitions.
 - search-replace definition: defines search term/pattern and replacement.
-  - `name`: name of the definition.
-  - `message`: corresponding message.
-  - `search`: text or array of texts to search
-  - `searchPattern`: regex pattern or array of patterns to search. Include flags as well, as if you are defining a regex literal in JavaScript, e.g. `/http/g`.
+  - `name`: Name of the definition.
+  - `message`: Corresponding message.
+  - `information`: Optional. An absolute URL of a link to more information about the sub-rule.
+  - `search`: Text or array of texts to search.
+  - `searchPattern`: Regex pattern or array of patterns to search. Include flags as well, as if you are defining a regex literal in JavaScript, e.g. `/http/g`.
   - `replace`: Optional. The replacement string(s), e.g. `https`. Regex properties like `$1` can be used if `searchPattern` is being used.
   - `searchScope` Optional. Scope to perform the search in.
     - `all`: Default. Search in all Markdown content.
     - `code`: Search only in code (block and inline). That is code inside code fences and inline backticks.
-    - `text`: Search only in markdown text, skip code.
+    - `text`: Search only in Markdown text, skip code.
   - `skipCode`: Optional. All code(inline and block), which is inside backticks, will be skipped. _This property is deprecated use `searchScope` instead._
 
 Properties are case-sensitive and are in camel case.\

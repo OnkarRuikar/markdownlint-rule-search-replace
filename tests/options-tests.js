@@ -6,6 +6,7 @@ const test = require("ava").default;
 const markdownlint = require("markdownlint");
 const searchReplace = require("../rule");
 const check = require("./utils").check;
+const checkRuleInformation = require("./utils").checkRuleInformation;
 
 const inputFile = "./tests/data/options-tests.md";
 
@@ -250,4 +251,38 @@ test("checkPropertiesSearchList", (t) => {
 ./tests/data/multivalue_search.md: 8: search-replace Custom rule [bad-spellings: Incorrect spelling] [Context: "column: 13 text:'web site'"]`;
 
   check(t, options, expected);
+});
+
+test("checkPropertyInformation", (t) => {
+  const options = {
+    config: JSON.parse(`{
+      "default": true,
+      "search-replace": {
+        "rules": [
+          {
+            "name": "m-dash",
+            "message": "Don't use '--'.",
+            "information": "https://example.com/rules/ellipsis",
+            "searchPattern": "/--/g",
+            "replace": "—"
+          }
+        ]
+      }
+    }`),
+    customRules: [searchReplace],
+    resultVersion: 3,
+    files: [inputFile],
+  };
+
+  checkRuleInformation(t, options);
+
+  // check bad URL
+  options.config["search-replace"].rules[0].information = "bad-url";
+  t.throws(() => markdownlint.sync(options), {
+    message: "Provide valid 'information' URL: bad-url",
+  });
+
+  // check default
+  delete options.config["search-replace"].rules[0].information;
+  checkRuleInformation(t, options);
 });
