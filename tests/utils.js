@@ -23,7 +23,7 @@ function applyFixes(file, result, expected) {
 function checkFix(executionContext, options, inputFile, outputFile) {
   executionContext.is(
     ...applyFixes(inputFile, markdownlint.sync(options), outputFile),
-    "Output doesn't match."
+    "Output doesn't match.",
   );
 }
 
